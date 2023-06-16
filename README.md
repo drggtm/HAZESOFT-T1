@@ -5,6 +5,8 @@ You can see the results at http://localhost:9000/site/index.html
 ## If in case you get nginx 404 error then
  i. Check the file permission of:  /var/www/html where lies your index.html cloned from given repository and give executable permission.
  ii. Go to /etc/nginx/http.d/default.conf and change the contents with your favouriate text editor as 
+ 
+ 
  server {
     listen 80 default_server;
     listen [::]:80 default_server;
@@ -19,6 +21,8 @@ You can see the results at http://localhost:9000/site/index.html
         internal;
     }
 }
+
+
 
 # Dockerfile Details
 ## Base Image
