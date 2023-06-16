@@ -3,8 +3,10 @@ To run this Dockerfile clone the repo and build an image with your_image_name( c
 You can see the results at http://localhost:9000/site/index.html
 
 ## If in case you get nginx 404 error then
- i. Check the file permission of:  /var/www/html where lies your index.html cloned from given repository and give executable permission.
- ii. Go to /etc/nginx/http.d/default.conf and change the contents with your favouriate text editor as 
+ ### i.
+ Check the file permission of:  /var/www/html where lies your index.html cloned from given repository and give executable permission.
+ ### ii.
+ Go to /etc/nginx/http.d/default.conf and change the contents with your favouriate text editor as 
  
  
  server {
