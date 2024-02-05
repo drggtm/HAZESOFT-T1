@@ -48,4 +48,5 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           command_timeout: 30m
           script: |
-            mkdir -p /tmp/app/from-abc
+            mkdir -p /tmp/app/
+            tar -czf - . | ssh -o StrictHostKeyChecking=no -i ${{ secrets.PRIVATE_KEY }}@${{ secrets.IP_ADDRESS }} "tar -xzf - -C /tmp/app; mkdir -p /home/root/nodeapp"
