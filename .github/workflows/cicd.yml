@@ -16,8 +16,8 @@ jobs:
     - name: Set up SSH
       uses: webfactory/ssh-agent@v0.5.0
       with:
-        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+        ssh-private-key: ${{ secrets.PRIVATE_KEY }}
 
     - name: SSH into remote server
       run: |
-        ssh -o StrictHostKeyChecking=no -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "your-command-here"
+        ssh -o StrictHostKeyChecking=no -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.IP_ADDRESS }} "your-command-here"
