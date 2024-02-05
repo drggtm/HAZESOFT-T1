@@ -74,10 +74,10 @@ jobs:
 
       - name: Build and deploy
         run: |
-          ssh -vvv -o StrictHostKeyChecking=no -i private_key.pem root@147.182.198.18 "mkdir -p /tmp/app/12"
-          tar -czf - . | ssh -o StrictHostKeyChecking=no -i private_key.pem root@147.182.198.18 "tar -xzf - -C /tmp/app/12; mkdir -p /home/root/nodeapp"
-        #   ssh -o StrictHostKeyChecking=no -i private_key.pem root@147.182.198.18 "rm -rf /home/root/nodeapp/* ; rm -rf /home/root/nodeapp/.* ; cp -r /tmp/app/. /home/root/nodeapp/ ; rm -rf /tmp/app"
-        #   ssh -o StrictHostKeyChecking=no -i private_key.pem root@147.182.198.18 "cd /home/root/nodeapp/ && sudo docker compose -f docker-compose.yml up --build --force-recreate -d"
+          ssh -vvv -o StrictHostKeyChecking=no -i private_key.pem root@147.182.198.18 "mkdir -p /tmp/app/"
+          tar -czf - . | ssh -o StrictHostKeyChecking=no -i private_key.pem root@147.182.198.18 "tar -xzf - -C /tmp/app/; mkdir -p /home/root/dictionary"
+          ssh -o StrictHostKeyChecking=no -i private_key.pem root@147.182.198.18 "rm -rf /home/root/dictionary/* ; rm -rf /home/root/dictionary/.* ; cp -r /tmp/app/. /home/root/dictionary/ ; rm -rf /tmp/app"
+          ssh -o StrictHostKeyChecking=no -i private_key.pem root@147.182.198.18 "cd /home/root/dictionary/ && sudo docker build -t dict ."
 
     env:
       PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
