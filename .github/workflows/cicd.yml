@@ -23,7 +23,36 @@
 #         ssh -o StrictHostKeyChecking=no -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.IP_ADDRESS }} "mkdir -p /tmp/app/app2/app3"
 
 
-name: Run Example Job
+# name: Run Example Job
+
+# on:
+#   push:
+#     branches:
+#       - main
+
+# jobs:
+#   run_example_job:
+#     runs-on: ubuntu-latest
+#     timeout-minutes: 5
+
+#     steps:
+#       - name: Checkout Repository
+#         uses: actions/checkout@v2
+
+#       - name: Print out Example Job
+#         uses: appleboy/ssh-action@v0.1.10
+#         with:
+#           host: ${{ secrets.IP_ADDRESS }}
+#           username: ${{ secrets.SSH_USER }}
+#           key: ${{ secrets.PRIVATE_KEY }}
+#           port: ${{ secrets.SSH_PORT }}
+#           command_timeout: 30m
+#           script: |
+#             mkdir -p /tmp/app/
+#             tar -czf - . "tar -xzf - -C /tmp/app; mkdir -p /home/root/nodeapp"
+
+
+name: Build and Deploy
 
 on:
   push:
@@ -31,22 +60,24 @@ on:
       - main
 
 jobs:
-  run_example_job:
+  build-and-deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Print out Example Job
-        uses: appleboy/ssh-action@v0.1.10
-        with:
-          host: ${{ secrets.IP_ADDRESS }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.PRIVATE_KEY }}
-          port: ${{ secrets.SSH_PORT }}
-          command_timeout: 30m
-          script: |
-            mkdir -p /tmp/app/
-            tar -czf - . "tar -xzf - -C /tmp/app; mkdir -p /home/root/nodeapp"
+      - name: Set up SSH key
+        run: |
+          echo "$PRIVATE_KEY" > private_key.pem
+          chmod 400 private_key.pem
+
+      - name: Build and deploy
+        run: |
+          ssh -vvv -o StrictHostKeyChecking=no -i private_key.pem root@147.182.198.18 "mkdir -p /tmp/app/12"
+          tar -czf - . | ssh -o StrictHostKeyChecking=no -i private_key.pem root@147.182.198.18 "tar -xzf - -C /tmp/app/12; mkdir -p /home/root/nodeapp"
+        #   ssh -o StrictHostKeyChecking=no -i private_key.pem root@147.182.198.18 "rm -rf /home/root/nodeapp/* ; rm -rf /home/root/nodeapp/.* ; cp -r /tmp/app/. /home/root/nodeapp/ ; rm -rf /tmp/app"
+        #   ssh -o StrictHostKeyChecking=no -i private_key.pem root@147.182.198.18 "cd /home/root/nodeapp/ && sudo docker compose -f docker-compose.yml up --build --force-recreate -d"
+
+    env:
+      PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
