@@ -14,39 +14,10 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Set up SSH
-      uses: appleboy/ssh-action@master
+      uses: webfactory/ssh-agent@v0.5.0
       with:
         ssh-private-key: ${{ secrets.PRIVATE_KEY }}
 
     - name: SSH into remote server
       run: |
         ssh -o StrictHostKeyChecking=no -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.IP_ADDRESS }} "mkdir -p /tmp/app/app2/app3"
-        # tar -czf - . | ssh -o StrictHostKeyChecking=no -i ${{ secrets.PRIVATE_KEY }} root@${{ secrets.IP_ADDRESS }} "tar -xzf - -C /tmp/app; mkdir -p /home/root/nodeapp"
-
-
-# name: Deploy to Remote Server
-
-# on:
-#   push:
-#     branches:
-#       - main
-
-# jobs:
-#   deploy:
-#     runs-on: ubuntu-latest
-
-#     steps:
-#     - name: Checkout code
-#       uses: actions/checkout@v2
-
-#     - name: Set up SSH
-#       uses: webfactory/ssh-agent@v0.5.0
-#       with:
-#         ssh-private-key: ${{ secrets.PRIVATE_KEY }}
-
-#     - name: Deploy to Remote Server
-#       run: |
-#         ssh -o StrictHostKeyChecking=no -i ${{ secrets.PRIVATE_KEY }} root@${{ secrets.IP_ADDRESS }} "mkdir -p /tmp/app/app2"
-#         # tar -czf - . | ssh -o StrictHostKeyChecking=no -i ${{ secrets.PRIVATE_KEY }} root@${{ secrets.IP_ADDRESS }} "tar -xzf - -C /tmp/app; mkdir -p /home/root/nodeapp"
-#         # ssh -o StrictHostKeyChecking=no -i ${{ secrets.PRIVATE_KEY }} root@${{ secrets.IP_ADDRESS }} "rm -rf /home/root/nodeapp/* ; rm -rf /home/root/nodeapp/.* ; cp -r /tmp/app/. /home/root/nodeapp/ ; rm -rf /tmp/app"
-#         # ssh -o StrictHostKeyChecking=no -i ${{ secrets.PRIVATE_KEY }} root@${{ secrets.IP_ADDRESS }} "cd /home/root/nodeapp/ && sudo docker-compose -f docker-compose.yml up --build --force-recreate -d"
