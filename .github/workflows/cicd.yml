@@ -77,7 +77,7 @@ jobs:
           ssh -vvv -o StrictHostKeyChecking=no -i private_key.pem root@147.182.198.18 "mkdir -p /tmp/app/"
           tar -czf - . | ssh -o StrictHostKeyChecking=no -i private_key.pem root@147.182.198.18 "tar -xzf - -C /tmp/app/; mkdir -p /home/root/dictionary"
           ssh -o StrictHostKeyChecking=no -i private_key.pem root@147.182.198.18 "rm -rf /home/root/dictionary/* ; rm -rf /home/root/dictionary/.* ; cp -r /tmp/app/. /home/root/dictionary/ ; rm -rf /tmp/app"
-          ssh -o StrictHostKeyChecking=no -i private_key.pem root@147.182.198.18 "cd /home/root/dictionary/ && sudo docker build -t dictionary ."
+          ssh -o StrictHostKeyChecking=no -i private_key.pem root@147.182.198.18 "cd /home/root/dictionary/ && sudo docker build --no-cache -t dictionary ."
      
       - name: Clear Repo and codes
         run: |
