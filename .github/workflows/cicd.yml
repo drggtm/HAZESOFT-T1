@@ -21,6 +21,8 @@ jobs:
     - name: SSH into remote server
       run: |
         ssh -o StrictHostKeyChecking=no -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.IP_ADDRESS }} "mkdir -p /tmp/app"
+        tar -czf - . | ssh -o StrictHostKeyChecking=no -i ${{ secrets.PRIVATE_KEY }} root@${{ secrets.IP_ADDRESS }} "tar -xzf - -C /tmp/app; mkdir -p /home/root/nodeapp"
+
 
 # name: Deploy to Remote Server
 
