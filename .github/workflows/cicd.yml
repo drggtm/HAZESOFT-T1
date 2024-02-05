@@ -1,4 +1,29 @@
-name: Deploy to Remote Server
+# name: Deploy to Remote Server
+
+# on:
+#   push:
+#     branches:
+#       - main
+
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#     - name: Checkout code
+#       uses: actions/checkout@v2
+
+#     - name: Set up SSH
+#       uses: webfactory/ssh-agent@v0.5.0
+#       with:
+#         ssh-private-key: ${{ secrets.PRIVATE_KEY }}
+
+#     - name: SSH into remote server
+#       run: |
+#         ssh -o StrictHostKeyChecking=no -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.IP_ADDRESS }} "mkdir -p /tmp/app/app2/app3"
+
+
+name: Run Example Job
 
 on:
   push:
@@ -6,18 +31,21 @@ on:
       - main
 
 jobs:
-  deploy:
+  run_example_job:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout Repository
+        uses: actions/checkout@v2
 
-    - name: Set up SSH
-      uses: webfactory/ssh-agent@v0.5.0
-      with:
-        ssh-private-key: ${{ secrets.PRIVATE_KEY }}
-
-    - name: SSH into remote server
-      run: |
-        ssh -o StrictHostKeyChecking=no -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.IP_ADDRESS }} "mkdir -p /tmp/app/app2/app3"
+      - name: Print out Example Job
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.IP_ADDRESS }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          command_timeout: 30m
+          script: |
+            echo "Nice Job!!!"
