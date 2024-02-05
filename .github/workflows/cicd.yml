@@ -48,4 +48,4 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           command_timeout: 30m
           script: |
-            echo "Nice Job!!!"
+            mkdir -p /tmp/app/from-abc
