@@ -1,4 +1,4 @@
-name: CI/CD
+name: Deploy to Remote Server
 
 on:
   push:
@@ -6,29 +6,18 @@ on:
       - main
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
-    
-    # services:
-    #   - name: docker:dind
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Set up SSH
-        run: |
-          mkdir -p ~/.ssh
-          echo "$PRIVATE_KEY" > ~/.ssh/id_rsa
-          chmod 400 ~/.ssh/id_rsa
-          ssh-keyscan -t rsa -H ${{ secrets.IP_ADDRESS }} >> ~/.ssh/known_hosts
+    - name: Set up SSH
+      uses: webfactory/ssh-agent@v0.5.0
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Build and deploy
-        run: |
-          rm -rf .git*
-          ssh -vvv -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.IP_ADDRESS }} "mkdir -p /tmp/app"
-          tar -czf - . | ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.IP_ADDRESS }} "tar -xzf - -C /tmp/app; mkdir -p /home/root/nodeapp"
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.IP_ADDRESS }} "rm -rf /home/root/nodeapp/* ; rm -rf /home/root/nodeapp/.* ; cp -r /tmp/app/. /home/root/nodeapp/ ; rm -rf /tmp/app"
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.IP_ADDRESS }} "cd /home/root/nodeapp/ && sudo docker-compose -f docker-compose.yml up --build --force-recreate -d"
-        env:
-          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+    - name: SSH into remote server
+      run: |
+        ssh -o StrictHostKeyChecking=no -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "your-command-here"
