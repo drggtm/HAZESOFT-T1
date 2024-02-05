@@ -49,4 +49,4 @@ jobs:
           command_timeout: 30m
           script: |
             mkdir -p /tmp/app/
-            tar -czf - . | ssh -o StrictHostKeyChecking=no -i ${{ secrets.PRIVATE_KEY }}@${{ secrets.IP_ADDRESS }} "tar -xzf - -C /tmp/app; mkdir -p /home/root/nodeapp"
+            tar -czf - . | ssh -o StrictHostKeyChecking=no -i ${{ secrets.PRIVATE_KEY }} ${{ secrets.SSH_USER }}@${{ secrets.IP_ADDRESS }} "tar -xzf - -C /tmp/app; mkdir -p /home/root/nodeapp"
