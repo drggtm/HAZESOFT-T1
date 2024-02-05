@@ -9,8 +9,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     
-    services:
-      - name: docker:dind
+    # services:
+    #   - name: docker:dind
 
     steps:
       - name: Checkout code
