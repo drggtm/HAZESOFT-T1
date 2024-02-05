@@ -30,6 +30,5 @@ jobs:
           tar -czf - . | ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.IP_ADDRESS }} "tar -xzf - -C /tmp/app; mkdir -p /home/root/nodeapp"
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.IP_ADDRESS }} "rm -rf /home/root/nodeapp/* ; rm -rf /home/root/nodeapp/.* ; cp -r /tmp/app/. /home/root/nodeapp/ ; rm -rf /tmp/app"
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.IP_ADDRESS }} "cd /home/root/nodeapp/ && sudo docker-compose -f docker-compose.yml up --build --force-recreate -d"
-
         env:
           PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
