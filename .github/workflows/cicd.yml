@@ -92,7 +92,7 @@ jobs:
       - name: Build and deploy
         id: build_deploy
         run: |
-          ssh  -o StrictHostKeyChecking=no -i private_key.pem -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.IP_ADDRESS }} "mkdir -p /tmp/app/"
+          ssh  -o StrictHostKeyChecking=no -i private_key.pem -p ${{ secrets.SSH_PORT }} @${{ secrets.IP_ADDRESS }} "mkdir -p /tmp/app/"
           tar -czf - . | ssh -o StrictHostKeyChecking=no -i private_key.pem -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.IP_ADDRESS }} "tar -xzf - -C /tmp/app/; mkdir -p /home/root/dictionary"
           ssh -o StrictHostKeyChecking=no -i private_key.pem -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.IP_ADDRESS }} "rm -rf /home/root/dictionary/* ; rm -rf /home/root/dictionary/.* ; cp -r /tmp/app/. /home/root/dictionary/ ; rm -rf /tmp/app"
           ssh -o StrictHostKeyChecking=no -i private_key.pem -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.IP_ADDRESS }} "cd /home/root/dictionary/ && sudo docker build --no-cache -t dictionary ."
