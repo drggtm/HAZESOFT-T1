@@ -167,14 +167,14 @@ jobs:
 
       - name: Build and deploy
         run: |
-          ssh -vvv -o StrictHostKeyChecking=no -i private_key.pem -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.IP_ADDRESS }} "mkdir -p /tmp/app/"
+          ssh  -o StrictHostKeyChecking=no -i private_key.pem -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.IP_ADDRESS }} "mkdir -p /tmp/app/"
           tar -czf - . | ssh -o StrictHostKeyChecking=no -i private_key.pem -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.IP_ADDRESS }} "tar -xzf - -C /tmp/app/; mkdir -p /home/root/dictionary"
           ssh -o StrictHostKeyChecking=no -i private_key.pem -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.IP_ADDRESS }} "rm -rf /home/root/dictionary/* ; rm -rf /home/root/dictionary/.* ; cp -r /tmp/app/. /home/root/dictionary/ ; rm -rf /tmp/app"
           ssh -o StrictHostKeyChecking=no -i private_key.pem -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.IP_ADDRESS }} "cd /home/root/dictionary/ && sudo docker build --no-cache -t dictionary ."
      
-      # - name: Clear Repo and codes
-      #   run: |
-      #     ssh -o StrictHostKeyChecking=no -i private_key.pem root@${{ secrets.PRIVATE_KEY }} " rm -rf /home/root/dictionary/*"
+      - name: Clear Repo and codes
+        run: |
+          ssh  -o StrictHostKeyChecking=no -i private_key.pem -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.IP_ADDRESS }} " rm -rf /home/root/dictionary/*"
 
     env:
       PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
